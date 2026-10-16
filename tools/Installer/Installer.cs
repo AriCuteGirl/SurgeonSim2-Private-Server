@@ -166,6 +166,10 @@ static class Installer
             $"account_name={name}\n" +
             $"account_steamid={steamId}\n" +
             "language=english\n");
+        // PupBerg (Goldberg) blocks every non-LAN connection by default, which would also block our server
+        File.WriteAllText(Path.Combine(settings, "configs.main.ini"),
+            "[main::connectivity]\n" +
+            "disable_lan_only=1\n");
         File.WriteAllText(Path.Combine(settings, "configs.overlay.ini"),
             "[overlay::general]\n" +
             "enable_experimental_overlay=1\n" +
