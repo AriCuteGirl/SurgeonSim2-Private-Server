@@ -194,6 +194,7 @@ Send those to your friends directly and **don't upload them** if you want to kee
 | Problem | Fix |
 | --- | --- |
 | Installer: `this is not the 1.5.1.561 Assembly-CSharp.dll` | Wrong game version. You need the last co-op build 1.5.1.561. |
+| "requires an active internet connection" popup | PupBerg's LAN-only mode is blocking the server. Run the installer again (v1.0.0 from 17 Oct or newer), or add `steam_settings/configs.main.ini` with `[main::connectivity]` and `disable_lan_only=1`. |
 | Game stays on "Loading [100 %]" | The server isn't reachable. Open `http://SERVER:8090/auth/healthcheck` in a browser; it should say `OK`. |
 | You see each other in the party but can't play together | UDP 8021-8023 is blocked. Open it in both the cloud firewall and the VM firewall (the deploy script does the VM part). |
 | The friend list is empty | Both players must use the same server. Everyone on a server is everyone's friend. |
