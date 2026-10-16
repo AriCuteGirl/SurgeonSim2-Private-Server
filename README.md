@@ -5,7 +5,8 @@ single-player-only build, so this project brings back the backend the last co-op
 a small server emulator plus an installer that points your own copy of the game at it.
 
 **No game files are included.** You need your own copy of the last co-op build,
-**1.5.1.561** (Steam depot `774793`, manifest `7262676543609055679`).
+**1.5.1.561**. If you own the game on Steam you can download it for free, see
+[Get the old build](#get-the-old-build).
 
 ## Downloads
 
@@ -33,6 +34,45 @@ Players need a server address from whoever hosts one. The downloads contain no s
 Not revived: community levels (UGC), leaderboards, Twitch integration and Vivox voice chat (use Discord).
 
 ---
+
+## Get the old build
+
+Steam only installs the new single-player version, but you can still download the old co-op build with your
+own Steam account if you own Surgeon Simulator 2:
+
+| | |
+| --- | --- |
+| App ID | `774791` |
+| Depot ID | `774793` |
+| Manifest ID | `7262676543609055679` |
+
+### Option 1: Steam console (no extra tools)
+
+1. Open the Steam console:
+   - **Windows:** press **Win + R**, type `steam://open/console`, press Enter.
+   - **Linux:** run `steam steam://open/console` in a terminal (or type `steam://open/console` into your browser).
+
+   Steam opens a **Console** tab.
+2. Paste this and press Enter:
+
+   ```
+   download_depot 774791 774793 7262676543609055679
+   ```
+
+3. Wait. It shows nothing while it downloads (about 2.7 GB). When it's done it prints
+   `Depot download complete : "...\steamapps\content\app_774791\depot_774793"`.
+4. That folder is your old build. Move it somewhere handy, for example `Surgeon Sim 2 Old`,
+   and check that it contains `Surgeon Simulator 2.exe` and `BuildVersion.txt` saying `1.5.1.561`.
+
+### Option 2: DepotDownloader
+
+With [DepotDownloader](https://github.com/SteamRE/DepotDownloader) (logs in with your own account):
+
+```bash
+DepotDownloader -app 774791 -depot 774793 -manifest 7262676543609055679 -username YOUR_STEAM_LOGIN -remember-password -dir "Surgeon Sim 2 Old"
+```
+
+Either way the download only works if your Steam account owns the game.
 
 ## Playing
 
