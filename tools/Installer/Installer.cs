@@ -174,6 +174,7 @@ static class Installer
             "[overlay::general]\n" +
             "enable_experimental_overlay=1\n" +
             "\n[overlay::pupberg]\n" +
+            "frontend=classic\n" +   // the new PupBerg frontend draws no text in this game (DX11 under Proton)
             "theme=Pink Neon\n" +
             "network_mode=server\n" +
             (string.IsNullOrEmpty(lobby) ? "" : $"lobby_server={lobby}\n") +
