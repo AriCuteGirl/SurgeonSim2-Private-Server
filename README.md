@@ -46,33 +46,36 @@ own Steam account if you own Surgeon Simulator 2:
 | Depot ID | `774793` |
 | Manifest ID | `7262676543609055679` |
 
-### Option 1: Steam console (no extra tools)
+### Option 1 (easiest): SteamDepotDownloaderGUI
 
-1. Open the Steam console:
-   - **Windows:** press **Win + R**, type `steam://open/console`, press Enter.
-   - **Linux:** run `steam steam://open/console` in a terminal (or type `steam://open/console` into your browser).
+[**SteamDepotDownloaderGUI**](https://github.com/mmvanheusden/SteamDepotDownloaderGUI) is a simple window around
+the official [DepotDownloader](https://github.com/SteamRE/DepotDownloader). Works on Windows, Linux and Steam Deck.
 
-   Steam opens a **Console** tab.
-2. Paste this and press Enter:
+1. Download the latest version for your system from its
+   [Releases](https://github.com/mmvanheusden/SteamDepotDownloaderGUI/releases) page and start it.
+2. If it asks for .NET, use its **Auto Download .NET** button (gear menu).
+3. Fill in:
+   - **Username / Password**: your Steam login (it goes straight to Steam; Steam Guard asks for your code)
+   - **App ID** `774791`, **Depot ID** `774793`, **Manifest ID** `7262676543609055679`
+   - **Output folder**: wherever you want the game, for example `Surgeon Sim 2 Old`
+4. Press **Download** and wait (about 2.7 GB).
+5. Check that the folder contains `Surgeon Simulator 2.exe` and that `BuildVersion.txt` says `1.5.1.561`.
 
-   ```
-   download_depot 774791 774793 7262676543609055679
-   ```
-
-3. Wait. It shows nothing while it downloads (about 2.7 GB). When it's done it prints
-   `Depot download complete : "...\steamapps\content\app_774791\depot_774793"`.
-4. That folder is your old build. Move it somewhere handy, for example `Surgeon Sim 2 Old`,
-   and check that it contains `Surgeon Simulator 2.exe` and `BuildVersion.txt` saying `1.5.1.561`.
-
-### Option 2: DepotDownloader
-
-With [DepotDownloader](https://github.com/SteamRE/DepotDownloader) (logs in with your own account):
+### Option 2: DepotDownloader (command line)
 
 ```bash
 DepotDownloader -app 774791 -depot 774793 -manifest 7262676543609055679 -username YOUR_STEAM_LOGIN -remember-password -dir "Surgeon Sim 2 Old"
 ```
 
-Either way the download only works if your Steam account owns the game.
+### Option 3: Steam console (no extra tools, may not work on newer Steam clients)
+
+1. Open the console: **Windows** press **Win + R** and run `steam://open/console`;
+   **Linux** run `steam steam://open/console`.
+2. Paste `download_depot 774791 774793 7262676543609055679` and press Enter, then wait (it shows nothing while it
+   downloads). When it's done it prints the folder: `steamapps\content\app_774791\depot_774793`.
+3. If it only prints an error, Steam has blocked console downloads for you; use option 1 instead.
+
+Every option only works if your Steam account owns the game. Your login is only ever sent to Steam.
 
 ## Playing
 
