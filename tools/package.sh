@@ -26,6 +26,14 @@ for rid in win-x64 linux-x64; do
   cp README.md $out/README.md
 done
 cp linux/play.sh build/pkg/linux-x64/
+
+# server download: Python server + deploy scripts + smoke test, no data and no deploy.env
+R=build/pkg/server/SS2Revival-Server
+mkdir -p $R/server $R/deploy $R/tests
+cp -r server/ss2server.py server/api.py server/state.py server/challenges.py server/news $R/server/
+cp deploy/deploy_oracle.sh deploy/backup.sh deploy/deploy.env.example $R/deploy/
+cp tests/smoke_test.py $R/tests/ && cp README.md $R/
+(cd build/pkg/server && zip -qr ../../../dist/SS2Revival-Server.zip SS2Revival-Server)
 (cd build/pkg/win-x64 && zip -qr ../../../dist/SS2Revival-Windows.zip .)
 tar -C build/pkg/linux-x64 -czf dist/SS2Revival-Linux.tar.gz .
 

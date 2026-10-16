@@ -7,6 +7,18 @@ a small server emulator plus an installer that points your own copy of the game 
 **No game files are included.** You need your own copy of the last co-op build,
 **1.5.1.561** (Steam depot `774793`, manifest `7262676543609055679`).
 
+## Downloads
+
+Grab them from [**Releases**](../../releases/latest):
+
+| File | For | What's inside |
+| --- | --- | --- |
+| `SS2Revival-Windows.zip` | Players on **Windows** | `SS2Revival-Installer.exe`, `RevivalMod.dll`, PupBerg `steam_api64.dll` |
+| `SS2Revival-Linux.tar.gz` | Players on **Linux / Steam Deck** | Linux installer, `RevivalMod.dll`, PupBerg, `play.sh` (Proton launcher) |
+| `SS2Revival-Server.zip` | People who want to **host a server** | The Python server, VPS deploy + backup scripts, smoke test |
+
+Players need a server address from whoever hosts one. The downloads contain no server address and no game files.
+
 ## What works
 
 - Login through the [PupBerg](https://github.com/AriCuteGirl/PupBerg) Steam emulator (Steam doesn't need to run)
