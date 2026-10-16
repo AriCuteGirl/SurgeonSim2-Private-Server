@@ -38,7 +38,7 @@ static class Installer
             string cmd = args.Length > 0 ? args[0] : "install";
             string gameDir = FindGame(positional.FirstOrDefault(), interactive);
             if (cmd == "uninstall") Uninstall(gameDir);
-            else if (cmd == "install") Install(gameDir, opts, interactive && !opts.ContainsKey("yes"));
+            else if (cmd == "install") Install(gameDir, opts, !opts.ContainsKey("yes"));
             else throw new Exception("unknown command " + cmd);
             if (interactive) Pause();
             return 0;
@@ -122,7 +122,26 @@ static class Installer
         if (string.IsNullOrWhiteSpace(host)) throw new Exception("no server address: pass --host <ip> or put host=<ip> in server.txt");
         string port = o.GetValueOrDefault("port") ?? cfg.GetValueOrDefault("port") ?? DefaultPort;
         string lobby = o.GetValueOrDefault("pupberg-lobby") ?? cfg.GetValueOrDefault("pupberg_lobby");
-        string name = o.GetValueOrDefault("name") ?? Ask("Your name in game", oldName ?? Environment.UserName, interactive);
+        string name = o.GetValueOrDefault("name");
+        string pickedId = null;
+        if (name == null)
+        {
+            // like PupBerg's account picker: offer the Steam accounts that logged in on this PC
+            var accounts = SteamAccounts();
+            if (interactive && accounts.Count > 0)
+            {
+                Console.WriteLine("\nWho are you? (your Steam accounts on this PC)");
+                for (int i = 0; i < accounts.Count; i++) Console.WriteLine($"  {i + 1}) {accounts[i].name}  ({accounts[i].id})");
+                Console.WriteLine($"  {accounts.Count + 1}) type a different name");
+                var a = Ask("Pick a number", "1", true);
+                if (int.TryParse(a, out var n) && n >= 1 && n <= accounts.Count)
+                {
+                    name = accounts[n - 1].name;
+                    pickedId = accounts[n - 1].id;
+                }
+            }
+            name ??= Ask("Your name in game", oldName ?? Environment.UserName, interactive);
+        }
         string room = o.GetValueOrDefault("room") ?? Ask("PupBerg room code (same for you and your friends)", DefaultRoom, interactive);
 
         // 1. back up originals once
@@ -140,7 +159,7 @@ static class Installer
         Directory.CreateDirectory(settings);
         File.WriteAllText(Path.Combine(settings, "steam_appid.txt"), AppId);
         File.WriteAllText(Path.Combine(game, "steam_appid.txt"), AppId);
-        string steamId = oldId ?? (76561198000000000UL + (ulong)new Random().Next(10_000_000, 999_999_999)).ToString();
+        string steamId = pickedId ?? oldId ?? (76561198000000000UL + (ulong)new Random().Next(10_000_000, 999_999_999)).ToString();
         File.WriteAllText(userIni,
             "[user::general]\n" +
             $"account_name={name}\n" +
@@ -163,6 +182,44 @@ static class Installer
         Console.WriteLine("Start the game with \"Surgeon Simulator 2.exe\" (Steam does not need to be running).");
         Console.WriteLine("In the lobby: walk to the terminal / party menu and invite your friend, or join them from the PupBerg overlay (Shift+Tab).");
         Console.WriteLine("To undo everything run:  SS2Revival-Installer uninstall");
+    }
+
+    // Steam's config/loginusers.vdf: "7656119..." { "AccountName" ".." "PersonaName" ".." ... }
+    static List<(string id, string name)> SteamAccounts()
+    {
+        var list = new List<(string, string)>();
+        var roots = new List<string>();
+        if (OperatingSystem.IsWindows())
+        {
+            try
+            {
+                using var k = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\Valve\Steam");
+                if (k?.GetValue("SteamPath") is string sp) roots.Add(sp);
+            }
+            catch { }
+            roots.Add(@"C:\Program Files (x86)\Steam");
+        }
+        else
+        {
+            var home = Environment.GetEnvironmentVariable("HOME") ?? "";
+            roots.Add(Path.Combine(home, ".local/share/Steam"));
+            roots.Add(Path.Combine(home, ".steam/steam"));
+            roots.Add(Path.Combine(home, ".var/app/com.valvesoftware.Steam/data/Steam"));
+        }
+        foreach (var r in roots)
+        {
+            var f = Path.Combine(r, "config", "loginusers.vdf");
+            if (!File.Exists(f)) continue;
+            var text = File.ReadAllText(f);
+            foreach (System.Text.RegularExpressions.Match m in System.Text.RegularExpressions.Regex.Matches(text, "\"(7656\\d{13})\"\\s*\\{([^}]*)\\}"))
+            {
+                var persona = System.Text.RegularExpressions.Regex.Match(m.Groups[2].Value, "\"PersonaName\"\\s*\"([^\"]*)\"");
+                var name = persona.Success && persona.Groups[1].Value.Length > 0 ? persona.Groups[1].Value : "Steam user";
+                if (!list.Exists(x => x.Item1 == m.Groups[1].Value)) list.Add((m.Groups[1].Value, name));
+            }
+            if (list.Count > 0) break;
+        }
+        return list;
     }
 
     static Dictionary<string, string> ReadServerTxt()

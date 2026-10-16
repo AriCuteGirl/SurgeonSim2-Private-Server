@@ -33,7 +33,8 @@ Everybody who wants to play together must use the same server and the same PupBe
 2. Unzip it **into your old Surgeon Simulator 2 folder** (next to `Surgeon Simulator 2.exe`).
 3. Double-click `SS2Revival-Installer.exe`. It asks for:
    - the **server address** (skipped if the host gave you a zip with a `server.txt` inside),
-   - **your name**,
+   - **who you are**: it lists the Steam accounts that logged in on your PC (like PupBerg's account picker),
+     so you play with your Steam name; or type any name,
    - the **PupBerg room code** (default `SS2-REVIVAL`; use the same one as your friends).
 4. Start `Surgeon Simulator 2.exe`. In the lobby, invite your friend from the party menu,
    or join them from the PupBerg overlay (**Shift+Tab**).
