@@ -1,0 +1,11 @@
+backups/
+**/bin/
+build/
+decomp/
+deploy/deploy.env
+dist/
+**/obj/
+__pycache__/
+server/data/
+tools/**/bin/
+tools/**/obj/

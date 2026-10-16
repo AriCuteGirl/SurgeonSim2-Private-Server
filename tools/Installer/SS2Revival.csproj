@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>SS2Revival-Installer</AssemblyName>
+    <RootNamespace>SS2Revival</RootNamespace>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Mono.Cecil" Version="0.11.4" />
+  </ItemGroup>
+</Project>
