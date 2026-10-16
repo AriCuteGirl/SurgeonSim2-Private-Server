@@ -125,6 +125,8 @@ def authenticate(req):
     if not uid.isdigit() or len(uid) > 20:
         return 400, {"error": "BAD_PLATFORM_USER"}
     pid, token = req.state.login(str(j.get("platformName", "steam"))[:16], uid)
+    if j.get("platformName") == "smoketest":
+        req.state.players[pid]["test"] = True   # hidden from friend lists, removed on restart
     log.info("login %s %s -> %s", j.get("platformName"), j.get("platformUserId"), pid)
     return 200, {"playerId": pid, "jwt": token}
 
@@ -182,7 +184,8 @@ def search_profile(req):
 @route("GET", r"/friend/players/" + UUID + r"/friends")
 def friends(req, pid):
     st = req.state
-    return 200, [{"playerId": o, "online": st.online(o)} for o in st.players if o != pid]
+    return 200, [{"playerId": o, "online": st.online(o)} for o, p in st.players.items()
+                 if o != pid and not p.get("test")]
 
 
 @route("GET", r"/friend/players/" + UUID + r"/invitations/(sent|received)")

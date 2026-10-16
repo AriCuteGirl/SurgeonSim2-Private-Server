@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Smoke test against a running server:  python3 tests/smoke_test.py [host] [http_port]
-Two fake players log in, form a party, relay a packet; an outsider must be refused."""
+Two fake players log in, form a party, relay a packet; an outsider must be refused.
+Test players are hidden from friend lists and removed when the server restarts."""
 import json
 import socket
 import sys
@@ -25,7 +26,7 @@ def call(method, path, body=None, token=None):
 
 
 def login(steamid):
-    s, j = call("POST", "/auth/authenticate", {"platformName": "steam", "platformUserId": steamid, "platformSecret": "x"})
+    s, j = call("POST", "/auth/authenticate", {"platformName": "smoketest", "platformUserId": steamid, "platformSecret": "x"})
     assert s == 200, (s, j)
     return j["playerId"], j["jwt"]
 

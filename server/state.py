@@ -48,6 +48,9 @@ class State:
         if os.path.exists(self.path):
             with open(self.path) as f:
                 self.players = json.load(f)
+        # drop players made by tests/smoke_test.py (and the old ones it made before it was marked)
+        self.players = {pid: p for pid, p in self.players.items()
+                        if not p.get("test") and not str(p.get("platformUserId", "")).startswith("765611900000001")}
         for pid, p in self.players.items():
             self.by_platform[f"{p['platformName']}:{p['platformUserId']}"] = pid
         if os.path.exists(self.sessions_path):
