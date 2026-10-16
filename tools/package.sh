@@ -44,7 +44,10 @@ if [ -n "$SS2_SERVER" ]; then
   for rid in win-x64 linux-x64; do
     printf 'host=%s\nport=8090\npupberg_lobby=%s:47620\nroom=%s\n' "$SS2_SERVER" "$SS2_SERVER" "${SS2_ROOM:-SS2-REVIVAL}" > build/pkg/$rid/server.txt
   done
+  # friends get a short README.txt instead of the GitHub README
+  rm build/pkg/win-x64/README.md && sed 's/$/\r/' tools/friend-README.txt > build/pkg/win-x64/README.txt
   (cd build/pkg/win-x64 && zip -qr "../../../dist/private/SS2Revival-Windows-$SS2_SERVER.zip" .)
+  rm build/pkg/win-x64/README.txt && cp README.md build/pkg/win-x64/README.md
   tar -C build/pkg/linux-x64 -czf "dist/private/SS2Revival-Linux-$SS2_SERVER.tar.gz" .
   rm build/pkg/*/server.txt
 fi
