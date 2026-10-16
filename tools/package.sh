@@ -34,7 +34,7 @@ SS2_SERVER="${SS2_SERVER:-${SS2_HOST#*@}}"
 if [ -n "$SS2_SERVER" ]; then
   mkdir -p dist/private
   for rid in win-x64 linux-x64; do
-    printf 'host=%s\nport=8090\npupberg_lobby=%s:47620\n' "$SS2_SERVER" "$SS2_SERVER" > build/pkg/$rid/server.txt
+    printf 'host=%s\nport=8090\npupberg_lobby=%s:47620\nroom=%s\n' "$SS2_SERVER" "$SS2_SERVER" "${SS2_ROOM:-SS2-REVIVAL}" > build/pkg/$rid/server.txt
   done
   (cd build/pkg/win-x64 && zip -qr "../../../dist/private/SS2Revival-Windows-$SS2_SERVER.zip" .)
   tar -C build/pkg/linux-x64 -czf "dist/private/SS2Revival-Linux-$SS2_SERVER.tar.gz" .

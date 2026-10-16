@@ -108,6 +108,7 @@ static class Installer
         Console.WriteLine("Build: " + version + (version.Contains("1.5.1") ? " (ok, last co-op build)" : " (WARNING: expected 1.5.1.561)"));
 
         // keep the settings from an earlier install as defaults
+        var cfg = ReadServerTxt();
         string oldName = null, oldId = null;
         if (File.Exists(userIni))
             foreach (var line in File.ReadAllLines(userIni))
@@ -116,7 +117,6 @@ static class Installer
                 if (line.StartsWith("account_steamid=")) oldId = line.Substring(16);
             }
 
-        var cfg = ReadServerTxt();
         string host = o.GetValueOrDefault("host") ?? cfg.GetValueOrDefault("host");
         if (string.IsNullOrEmpty(host)) host = Ask("Server address (IP or hostname of the SS2 server)", "", interactive);
         if (string.IsNullOrWhiteSpace(host)) throw new Exception("no server address: pass --host <ip> or put host=<ip> in server.txt");
@@ -142,7 +142,8 @@ static class Installer
             }
             name ??= Ask("Your name in game", oldName ?? Environment.UserName, interactive);
         }
-        string room = o.GetValueOrDefault("room") ?? Ask("PupBerg room code (same for you and your friends)", DefaultRoom, interactive);
+        string room = o.GetValueOrDefault("room") ?? cfg.GetValueOrDefault("room")
+            ?? Ask("PupBerg room code (same for you and your friends)", DefaultRoom, interactive);
 
         // 1. back up originals once
         if (!File.Exists(dllOrig)) File.Copy(dll, dllOrig);
