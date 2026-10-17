@@ -167,7 +167,7 @@ Useful on the VM: `systemctl status ss2`, `journalctl -u ss2 -f`, `sudo systemct
 
 ### Works with Server Manager
 
-[Server Manager](https://github.com/AriCuteGirl/Server-Manager-Releases) is a desktop app (Linux and
+[Server Manager](https://github.com/AriCuteGirl/Server-Manager-GUI) is a desktop app (Linux and
 Windows) that sets up and manages this server for you: deploy, firewall checklist, status, live log,
 players, backups and moving to another server. It reads `manager/game.json` and runs
 `server/manage.py` over SSH. You can also use `manage.py` yourself on the server (JSON output):
