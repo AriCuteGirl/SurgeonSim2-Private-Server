@@ -165,6 +165,23 @@ The deploy script sets everything up from your PC over SSH.
 
 Useful on the VM: `systemctl status ss2`, `journalctl -u ss2 -f`, `sudo systemctl restart ss2`.
 
+### Works with Server Manager
+
+[Server Manager](https://github.com/AriCuteGirl/Server-Manager-Releases) is a desktop app (Linux and
+Windows) that sets up and manages this server for you: deploy, firewall checklist, status, live log,
+players, backups and moving to another server. It reads `manager/game.json` and runs
+`server/manage.py` over SSH. You can also use `manage.py` yourself on the server (JSON output):
+
+```bash
+cd ~/ss2-server
+python3 manage.py players                # names, XP, last played
+python3 manage.py backup                 # -> backups/ss2-data-<date>.tar.gz
+sudo systemctl stop ss2 && python3 manage.py set <player-id> xp 5000 && sudo systemctl start ss2
+python3 manage.py help
+```
+
+The server keeps players in memory, so stop it before `set`, `reset` or `restore`.
+
 ### Giving your friends a ready-made download
 
 ```bash

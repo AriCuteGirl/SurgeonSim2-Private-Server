@@ -17,7 +17,7 @@ cd "$(dirname "$0")/.."
 
 echo "== copying server code"
 "${SSH[@]}" "$HOST" 'mkdir -p ~/ss2-server/data ~/ss2-server/news && chmod 700 ~/ss2-server/data'
-/usr/bin/scp -i "$KEY" server/ss2server.py server/api.py server/state.py server/challenges.py "$HOST":ss2-server/
+/usr/bin/scp -i "$KEY" server/ss2server.py server/api.py server/state.py server/challenges.py server/manage.py "$HOST":ss2-server/
 /usr/bin/scp -i "$KEY" server/news/*.png "$HOST":ss2-server/news/
 
 echo "== installing service + opening ports"

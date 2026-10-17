@@ -1,0 +1,58 @@
+{
+  "schema": 1,
+  "id": "surgeon-sim-2",
+  "name": "Surgeon Simulator 2",
+  "publisher": "Bossa Studios (2020)",
+  "platform": "PC",
+  "description": "Online co-op for the last co-op build (1.5.1): parties, invites, matchmaking, relay and daily challenges.",
+  "icon": "manager/icon.svg",
+  "art": "manager/art.svg",
+  "accent": "#14b8a6",
+  "repo": "https://github.com/AriCuteGirl/SurgeonSim2-Private-Server",
+  "source": {"github": "AriCuteGirl/SurgeonSim2-Private-Server", "ref": "main"},
+  "server": {
+    "dir": "server",
+    "files": ["ss2server.py", "api.py", "state.py", "challenges.py", "manage.py",
+              "news/coop.png", "news/pupberg.png", "news/revival.png"],
+    "install_dir": "~/ss2-server",
+    "start": "python3 -u ss2server.py",
+    "requires": "python3 >= 3.9",
+    "env": {
+      "SS2_HTTP_PORT": "{port:http}"
+    },
+    "ports": [
+      {"name": "http", "label": "Game API (HTTP)", "default": 8090, "protocol": "tcp", "required": true},
+      {"name": "stun", "label": "Address check (STUN)", "default": 8021, "protocol": "udp", "required": true, "fixed": true},
+      {"name": "relay", "label": "Co-op relay", "default": 8022, "protocol": "udp", "required": true, "fixed": true},
+      {"name": "notify", "label": "Invites (notifications)", "default": 8023, "protocol": "udp", "required": true, "fixed": true}
+    ],
+    "health": {
+      "type": "http", "port": "http", "path": "/auth/healthcheck", "expect": 200,
+      "udp": [{"port": "stun", "send": "SP{}", "expect": "SP"}]
+    },
+    "data_dir": "data",
+    "service_name": "ss2",
+    "systemd_extra": ["RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX", "RestrictNamespaces=yes", "MemoryMax=300M", "UMask=0077"],
+    "deploy_script": "deploy/deploy_oracle.sh"
+  },
+  "manage": "server/manage.py",
+  "edit_requires_stop": true,
+  "currencies": [
+    {"key": "xp", "label": "XP", "icon": "star", "min": 0, "max": 100000000}
+  ],
+  "live_edit_warning": "The server keeps players in memory. To save this change, Server Manager stops the server for a few seconds and starts it again. Players in a match are disconnected.",
+  "backup": {"name": "ss2-data-{date}.tar.gz"},
+  "client": {
+    "title": "How players join",
+    "how_to": [
+      "Everyone needs the last co-op build of Surgeon Simulator 2 (1.5.1, see \"Get the old build\" in the server project's README).",
+      "Download SS2Revival-Windows.zip (or -Linux.tar.gz) from the server project's GitHub Releases and unzip it into the game folder.",
+      "Run SS2Revival-Installer and enter the server address when it asks:",
+      "$ {public_host}",
+      "Linux / Steam Deck, in the game folder:",
+      "$ ./SS2Revival-Installer install . --host {public_host} --port {port}",
+      "Everyone uses the same server and the same PupBerg room code (default SS2-REVIVAL)."
+    ],
+    "rebuild_when_address_changes": false
+  }
+}
